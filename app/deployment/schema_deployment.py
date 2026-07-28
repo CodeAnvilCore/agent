@@ -25,6 +25,7 @@ def deploy_table(spark: SparkSession):
     # Build df from raw landed bronze csv file
     df = spark.read.option('header', True)\
                    .option('inferSchema', True)\
+                   .option('multiLine', True)\
                    .csv(str(bronze_file_landing_path))
 
     # Write df to delta table with partitioning by Country. Spark transformation.
