@@ -1,11 +1,11 @@
 from pathlib import Path
+import os
 from delta.pip import configure_spark_with_delta_pip
 from pyspark.sql import SparkSession
 # Inits
-script_dir = Path(__file__).resolve().parent
-project_root = script_dir.parents[1]
+script_dir = Path.cwd()
+project_root = script_dir.parents[0]
 bronze_file_landing_path = project_root / 'data' / 'bronze_raw.csv'
-delta_path = str(project_root / 'data' / 'delta_tables' / 'bronze_reviews')
 schema_name = 'bronze'
 table_name = 'bronze_reviews'
 # Utilities
@@ -32,7 +32,6 @@ def deploy_table(spark: SparkSession):
     # Write df to delta table with partitioning by Country. Spark transformation.
     df.write.format('delta')\
             .mode('overwrite')\
-            .option('path', delta_path)\
             .partitionBy('Country')\
             .saveAsTable(f'{schema_name}.{table_name}')
     # Spark action
