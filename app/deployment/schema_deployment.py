@@ -79,7 +79,8 @@ def transform_raw_to_bronze(raw_df: DataFrame) -> DataFrame:
                                         .otherwise(lit(None)))
     # Drop intermediate columns names
     final_df =\
-        day_of_experience_df.withColumnRenamed('review_fixed', 'review')\
+        day_of_experience_df.drop('review', 'date_of_experience')\
+                            .withColumnRenamed('review_fixed', 'review')\
                             .withColumnRenamed('date_of_experience_fixed', 'date_of_experience')
     return final_df
 def deploy_table(spark: SparkSession
